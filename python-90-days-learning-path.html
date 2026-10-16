@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 零基础 90 天学习路径</title>
+<style>
+  :root{
+    --bg:#0d1117; --surface:#151b26; --surface2:#1c2432; --border:#2a3444;
+    --text:#e6ebf2; --muted:#94a3b8; --faint:#6b7688;
+    --blue:#4b8bbe; --blue-soft:rgba(75,139,190,.14);
+    --yellow:#ffd343; --yellow-soft:rgba(255,211,67,.12);
+    --green:#3fb950; --green-soft:rgba(63,185,80,.13);
+    --red:#f85149; --red-soft:rgba(248,81,73,.12);
+    --purple:#a371f7; --purple-soft:rgba(163,113,247,.13);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75; font-size:15.5px;
+  }
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,kbd{
+    font-family:"Cascadia Code","JetBrains Mono",Consolas,Menlo,monospace;
+    background:var(--surface2); border:1px solid var(--border); border-radius:6px;
+    padding:1px 6px; font-size:.88em; color:var(--yellow);
+  }
+  .wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+
+  /* ===== nav ===== */
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(13,17,23,.86);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{max-width:1020px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:4px;height:56px;overflow-x:auto}
+  .nav-logo{font-weight:800;font-size:15px;color:var(--yellow);white-space:nowrap;margin-right:14px;letter-spacing:.5px}
+  nav a.nl{
+    color:var(--muted);font-size:13.5px;padding:6px 11px;border-radius:8px;white-space:nowrap;
+    transition:.15s;
+  }
+  nav a.nl:hover{color:var(--text);background:var(--surface2);text-decoration:none}
+
+  /* ===== hero ===== */
+  header.hero{padding:64px 0 44px;text-align:center;position:relative;overflow:hidden}
+  header.hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(640px 300px at 50% -60px,rgba(75,139,190,.16),transparent 70%);
+  }
+  .badge{
+    display:inline-block;background:var(--blue-soft);color:var(--blue);
+    border:1px solid rgba(75,139,190,.35);border-radius:999px;
+    font-size:13px;padding:4px 14px;margin-bottom:18px;letter-spacing:1px;
+  }
+  h1{font-size:clamp(28px,4.6vw,44px);font-weight:800;letter-spacing:.5px;line-height:1.3}
+  h1 .hl{color:var(--yellow)}
+  .hero p.sub{color:var(--muted);max-width:640px;margin:16px auto 0;font-size:15.5px}
+  .stats{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:30px}
+  .stat{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px 20px;min-width:118px;
+  }
+  .stat b{display:block;font-size:23px;color:var(--yellow);font-weight:800}
+  .stat span{font-size:12.5px;color:var(--faint)}
+
+  /* ===== sections ===== */
+  section{padding:38px 0 6px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+  .sec-num{
+    font-family:Consolas,monospace;font-size:13px;color:var(--blue);
+    border:1px solid rgba(75,139,190,.4);border-radius:8px;padding:2px 9px;background:var(--blue-soft);
+  }
+  h2{font-size:24px;font-weight:800;letter-spacing:.3px}
+  .sec-desc{color:var(--muted);font-size:14px;margin-bottom:22px}
+
+  /* ===== timeline ===== */
+  .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:6px 0 26px}
+  .tl-item{
+    background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--pc,var(--blue));
+    border-radius:10px;padding:13px 12px;
+  }
+  .tl-item .ph{font-size:11.5px;color:var(--pc,var(--blue));font-weight:700;letter-spacing:.8px}
+  .tl-item .wk{font-size:15px;font-weight:700;margin:3px 0}
+  .tl-item .tp{font-size:12px;color:var(--faint)}
+  @media(max-width:760px){.timeline{grid-template-columns:1fr 1fr}}
+
+  /* ===== tables ===== */
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+  th{
+    background:var(--surface2);color:var(--muted);text-align:left;font-weight:600;
+    padding:10px 14px;font-size:13px;letter-spacing:.5px;border-bottom:1px solid var(--border);
+  }
+  td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:rgba(75,139,190,.05)}
+  td.mono,th.mono{white-space:nowrap;font-family:Consolas,monospace;font-size:12.5px;color:var(--muted)}
+  .ms-cell{color:var(--yellow);font-weight:700;white-space:nowrap}
+
+  /* ===== phase blocks ===== */
+  .phase{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:26px 26px 20px;margin-bottom:22px;border-left:4px solid var(--pc,var(--blue));
+  }
+  .phase-tag{
+    display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+    color:var(--pc,var(--blue));background:color-mix(in srgb,var(--pc,var(--blue)) 13%,transparent);
+    border:1px solid color-mix(in srgb,var(--pc,var(--blue)) 40%,transparent);
+    padding:3px 12px;border-radius:999px;margin-bottom:10px;
+  }
+  .phase h3{font-size:20px;font-weight:800;margin-bottom:4px}
+  .phase .phase-goal{color:var(--muted);font-size:14px;margin-bottom:20px}
+
+  .week{
+    background:var(--bg);border:1px solid var(--border);border-radius:12px;
+    padding:18px 20px;margin-bottom:16px;
+  }
+  .week-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .week-head .wtitle{font-size:16.5px;font-weight:800}
+  .week-head .wdays{font-family:Consolas,monospace;font-size:12.5px;color:var(--yellow);background:var(--yellow-soft);border:1px solid rgba(255,211,67,.3);border-radius:7px;padding:2px 9px}
+  .week-goal{color:var(--muted);font-size:13.5px;margin-bottom:12px}
+  .week-goal b{color:var(--text);font-weight:600}
+
+  .daytab td:first-child{font-family:Consolas,monospace;color:var(--blue);white-space:nowrap;font-size:13px;font-weight:700}
+  .daytab td:last-child{font-size:13.5px}
+
+  .week-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:760px){.week-bottom{grid-template-columns:1fr}}
+  .mini{
+    background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 15px;font-size:13.5px;
+  }
+  .mini h5{font-size:12.5px;color:var(--muted);letter-spacing:1px;margin-bottom:7px;font-weight:700}
+  .mini ul{list-style:none}
+  .mini li{padding-left:18px;position:relative;margin-bottom:4px;color:var(--text)}
+  .mini li::before{content:"▸";position:absolute;left:2px;color:var(--blue)}
+  .mini.res li::before{color:var(--purple)}
+  .mini .res-name{color:var(--purple);font-weight:600}
+  .mini .res-desc{color:var(--faint);font-size:12.5px}
+
+  /* checkboxes */
+  .checks{list-style:none}
+  .checks li{margin-bottom:6px}
+  label.ck{display:flex;align-items:flex-start;gap:9px;cursor:pointer;font-size:13.5px;color:var(--text);user-select:none}
+  label.ck input{
+    appearance:none;width:16px;height:16px;flex:none;margin-top:4px;
+    border:1.5px solid var(--faint);border-radius:5px;background:transparent;cursor:pointer;transition:.15s;
+  }
+  label.ck input:checked{background:var(--green);border-color:var(--green)}
+  label.ck input:checked::after{
+    content:"✓";display:block;text-align:center;line-height:14px;font-size:11px;color:#0d1117;font-weight:900;
+  }
+  label.ck input:checked + span{color:var(--faint);text-decoration:line-through}
+
+  .milestone{
+    margin-top:14px;background:var(--yellow-soft);border:1px dashed rgba(255,211,67,.45);
+    border-radius:10px;padding:12px 16px;font-size:13.5px;color:var(--yellow);
+  }
+  .milestone b{letter-spacing:1px}
+
+  .note{
+    background:var(--red-soft);border:1px solid rgba(248,81,73,.35);border-radius:10px;
+    padding:11px 15px;font-size:13px;color:#ffb3ae;margin-top:12px;
+  }
+  .note b{color:var(--red)}
+
+  /* ===== resources ===== */
+  .res-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:760px){.res-grid{grid-template-columns:1fr}}
+  .res-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+  .res-card h4{font-size:15px;font-weight:800;margin-bottom:10px;color:var(--text)}
+  .res-card h4 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--blue)}
+  .res-card ul{list-style:none}
+  .res-card li{padding:6px 0;border-bottom:1px dashed var(--border);font-size:13.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .res-card li:last-child{border-bottom:none}
+  .res-card .r-name{color:var(--text);font-weight:600}
+  .res-card .r-tag{font-size:11.5px;color:var(--faint);white-space:nowrap}
+
+  /* ===== pitfalls ===== */
+  .pit-tab td:first-child{font-weight:700;color:var(--red);white-space:nowrap;font-size:13.5px}
+  .pit-tab td:nth-child(2){color:var(--muted)}
+
+  /* ===== tips ===== */
+  .tips{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  @media(max-width:860px){.tips{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.tips{grid-template-columns:1fr}}
+  .tip{
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 15px;
+    transition:.2s;
+  }
+  .tip:hover{border-color:rgba(75,139,190,.5);transform:translateY(-2px)}
+  .tip .no{font-family:Consolas,monospace;font-size:20px;font-weight:800;color:var(--blue);opacity:.75}
+  .tip h5{font-size:14px;font-weight:700;margin:6px 0 5px}
+  .tip p{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+  /* ===== fallback ===== */
+  .fall{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:860px){.fall{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.fall{grid-template-columns:1fr}}
+  .fall-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:10px;padding:14px 16px;font-size:13px}
+  .fall-item b{display:block;font-size:13.5px;margin-bottom:4px;color:#ffb3ae}
+  .fall-item p{color:var(--muted);font-size:12.5px;line-height:1.65}
+
+  /* ===== progress ===== */
+  .prog-box{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:24px 26px;margin-top:10px;
+  }
+  .prog-bar{height:10px;background:var(--surface2);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+  .prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--yellow));border-radius:999px;transition:width .35s}
+  .prog-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin:10px 0 18px}
+  .prog-meta b{color:var(--yellow)}
+
+  blockquote{
+    margin:34px 0 10px;padding:22px 26px;border-left:4px solid var(--yellow);
+    background:linear-gradient(90deg,var(--yellow-soft),transparent 70%);
+    border-radius:0 12px 12px 0;font-size:16px;color:var(--text);font-weight:600;
+  }
+  footer{padding:36px 0 44px;text-align:center;color:var(--faint);font-size:12.5px}
+  footer .rule{height:1px;background:var(--border);max-width:220px;margin:0 auto 18px}
+
+  @media print{
+    nav,.prog-bar{display:none}
+    body{background:#fff;color:#111}
+    .phase,.week,.res-card,.tip,.fall-item,.prog-box,table,.stat,.tl-item{background:#fff;border-color:#ddd}
+    h1,.tl-item .wk,.stat b{color:#111}
+    .hero p.sub,.sec-desc,.phase-goal,.week-goal,.mini .res-desc,.r-tag{color:#555}
+    section{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">🐍 Py90</span>
+    <a class="nl" href="#overview">路线总览</a>
+    <a class="nl" href="#p1">阶段一 · 基础语法</a>
+    <a class="nl" href="#p2">阶段二 · 进阶特性</a>
+    <a class="nl" href="#p3">阶段三 · 实用库</a>
+    <a class="nl" href="#p4">阶段四 · 实战项目</a>
+    <a class="nl" href="#p5">阶段五 · 综合项目</a>
+    <a class="nl" href="#resources">免费资源</a>
+    <a class="nl" href="#pitfalls">避坑指南</a>
+    <a class="nl" href="#checklist">里程碑打卡</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="badge">零基础 · 系统学习 · 项目驱动</div>
+    <h1>Python <span class="hl">90 天</span>学习路径</h1>
+    <p class="sub">从第一行代码到独立完成小项目。每天 2 小时，5 个阶段、5 个里程碑、5 个实战项目，配免费资源与避坑指南。</p>
+    <div class="stats">
+      <div class="stat"><b>90 天</b><span>约 13 周</span></div>
+      <div class="stat"><b>2 小时</b><span>每天投入</span></div>
+      <div class="stat"><b>180h</b><span>总学时</span></div>
+      <div class="stat"><b>5 阶段</b><span>循序渐进</span></div>
+      <div class="stat"><b>5 里程碑</b><span>每周可检验</span></div>
+      <div class="stat"><b>5 项目</b><span>实战练手</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ 总览 ============ -->
+<section id="overview">
+  <div class="sec-head"><span class="sec-num">00</span><h2>路线总览</h2></div>
+  <p class="sec-desc">终态目标：90 天后能独立完成 Python 小项目——数据获取 → 清洗处理 → 可视化 → 交付。</p>
+
+  <div class="timeline">
+    <div class="tl-item" style="--pc:#4b8bbe"><div class="ph">PHASE 1</div><div class="wk">Week 1–3</div><div class="tp">基础语法<br>M1：50 行小程序</div></div>
+    <div class="tl-item" style="--pc:#58a6ff"><div class="ph">PHASE 2</div><div class="wk">Week 4–6</div><div class="tp">进阶特性<br>M2：OOP + 工程化</div></div>
+    <div class="tl-item" style="--pc:#a371f7"><div class="ph">PHASE 3</div><div class="wk">Week 7–9</div><div class="tp">实用库<br>M3：数据闭环</div></div>
+    <div class="tl-item" style="--pc:#ffd343"><div class="ph">PHASE 4</div><div class="wk">Week 10–11</div><div class="tp">实战项目<br>M4：2 个小项目</div></div>
+    <div class="tl-item" style="--pc:#3fb950"><div class="ph">PHASE 5</div><div class="wk">Week 12–13</div><div class="tp">综合项目<br>M5：可展示交付</div></div>
+  </div>
+
+  <table>
+    <thead><tr><th class="mono">周</th><th class="mono">天数</th><th>主题</th><th>周末检查点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">W1</td><td class="mono">D1–7</td><td>Python 初识：环境、变量、类型、输入输出</td><td>跑通程序，会看报错</td></tr>
+      <tr><td class="mono">W2</td><td class="mono">D8–14</td><td>控制流与函数</td><td>能把重复代码写成函数</td></tr>
+      <tr><td class="mono">W3</td><td class="mono">D15–21</td><td>数据结构：列表 / 字典 / 元组 / 集合</td><td class="ms-cell">M1 · 50 行小程序</td></tr>
+      <tr><td class="mono">W4</td><td class="mono">D22–28</td><td>文件操作与异常处理</td><td>会用 with 管理文件</td></tr>
+      <tr><td class="mono">W5</td><td class="mono">D29–35</td><td>面向对象编程</td><td>理解类与对象</td></tr>
+      <tr><td class="mono">W6</td><td class="mono">D36–42</td><td>模块、标准库、pip、虚拟环境</td><td class="ms-cell">M2 · OOP + venv</td></tr>
+      <tr><td class="mono">W7</td><td class="mono">D43–49</td><td>网络请求与数据获取</td><td>能调用 API 并保存数据</td></tr>
+      <tr><td class="mono">W8</td><td class="mono">D50–56</td><td>Pandas 数据处理与 Matplotlib 可视化</td><td>会分析陌生 CSV</td></tr>
+      <tr><td class="mono">W9</td><td class="mono">D57–63</td><td>SQLite 数据库与 CRUD</td><td class="ms-cell">M3 · 数据闭环</td></tr>
+      <tr><td class="mono">W10</td><td class="mono">D64–70</td><td>项目 1：个人记账本</td><td>项目上 GitHub</td></tr>
+      <tr><td class="mono">W11</td><td class="mono">D71–77</td><td>项目 2：新闻聚合器</td><td class="ms-cell">M4 · 2 个独立项目</td></tr>
+      <tr><td class="mono">W12–13</td><td class="mono">D78–90</td><td>综合项目：个人数据分析仪表盘</td><td class="ms-cell">M5 · 综合项目交付</td></tr>
+    </tbody>
+  </table>
+
+  <div class="prog-box" style="margin-top:20px">
+    <h4 style="font-size:15px;font-weight:800;margin-bottom:12px">⏱ 每天 2 小时怎么分配</h4>
+    <table>
+      <thead><tr><th class="mono">时长</th><th>内容</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">40 分钟</td><td>学新知识</td><td>只跟一个主教程/文档，不要囤课</td></tr>
+        <tr><td class="mono">70 分钟</td><td>动手写代码</td><td>当天内容亲手敲一遍；抄完必须改参数、改结构再跑</td></tr>
+        <tr><td class="mono">10 分钟</td><td>复盘 + 记笔记</td><td>学了什么、哪里卡住、怎么解决的</td></tr>
+        <tr><td class="mono">周末</td><td>补漏 + 综合练习</td><td>不开新课，用来追进度和整理笔记</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ PHASE 1 ============ -->
+<section id="p1">
+  <div class="sec-head"><span class="sec-num">01</span><h2>Phase 1 · 基础语法</h2></div>
+  <p class="sec-desc">Day 1–21（Week 1–3）· 目标：把环境跑起来，掌握变量、控制流、函数与四大数据结构</p>
+
+  <div class="phase" style="--pc:#4b8bbe">
+    <span class="phase-tag">PHASE 1 · WEEK 1</span>
+    <h3>Python 初识</h3>
+    <p class="phase-goal"><b>目标：</b>环境跑起来，会写变量、数据类型、基本输入输出。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D1</td><td>安装 Python 3.12 + VS Code，写第一个程序 <code>hello.py</code>。⚠️ Windows 安装时勾选 <b>Add Python to PATH</b></td></tr>
+          <tr><td>D2</td><td>变量与命名规范（snake_case），int / float / str / bool</td></tr>
+          <tr><td>D3</td><td>算术、比较、逻辑运算符；类型转换 int() / str() / float()</td></tr>
+          <tr><td>D4</td><td>print() 与 f-string 格式化输出</td></tr>
+          <tr><td>D5</td><td>input() 交互输入；注释规范（# 单行、三引号 docstring）</td></tr>
+          <tr><td>D6</td><td>练习：华氏温度转摄氏、BMI 计算器</td></tr>
+          <tr><td>D7</td><td>补漏 + 猜数字小游戏（random 模块初体验）</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>华氏温度转摄氏温度程序</li><li>BMI 计算程序（输入身高体重）</li><li>简单的猜数字游戏</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">廖雪峰 Python 教程</span><span class="res-desc">前 3 节 · 中文图文</span></li><li><span class="res-name">Kaggle Learn: Python</span><span class="res-desc">微课 + 在线练习</span></li></ul></div>
+      </div>
+      <ul class="checks" style="margin-top:12px">
+        <li><label class="ck"><input type="checkbox"><span>能正确运行第一个 Python 程序</span></label></li>
+        <li><label class="ck"><input type="checkbox"><span>理解变量赋值和类型转换</span></label></li>
+      </ul>
+    </div>
+
+    <span class="phase-tag">PHASE 1 · WEEK 2</span>
+    <h3>控制流与函数</h3>
+    <p class="phase-goal"><b>目标：</b>掌握条件判断、循环和函数定义。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D8</td><td>if / elif / else，嵌套判断</td></tr>
+          <tr><td>D9</td><td>for 循环 + range()，遍历列表和字符串</td></tr>
+          <tr><td>D10</td><td>while 循环，break / continue</td></tr>
+          <tr><td>D11</td><td>函数 def / 参数 / return，默认参数</td></tr>
+          <tr><td>D12</td><td>作用域（局部 vs 全局），函数 docstring</td></tr>
+          <tr><td>D13</td><td>练习：闰年判断函数、九九乘法表</td></tr>
+          <tr><td>D14</td><td>补漏：斐波那契数列（递归初识，不强求）</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>判断闰年的函数</li><li>打印九九乘法表</li><li>计算斐波那契数列的函数</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">廖雪峰教程 · 函数章节</span><span class="res-desc">配合敲每个例子</span></li><li><span class="res-name">Exercism: Python Track</span><span class="res-desc">免费 · 有导师反馈</span></li></ul></div>
+      </div>
+      <ul class="checks" style="margin-top:12px">
+        <li><label class="ck"><input type="checkbox"><span>能把重复代码写成函数</span></label></li>
+        <li><label class="ck"><input type="checkbox"><span>能说出程序的执行流程</span></label></li>
+      </ul>
+    </div>
+
+    <span class="phase-tag">PHASE 1 · WEEK 3</span>
+    <h3>数据结构基础</h3>
+    <p class="phase-goal"><b>目标：</b>掌握列表、字典、元组、集合四大结构。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D15</td><td>列表 list：增删改查、切片、排序</td></tr>
+          <tr><td>D16</td><td>字典 dict：键值对、遍历、嵌套字典</td></tr>
+          <tr><td>D17</td><td>元组 tuple 与集合 set（去重、集合运算）</td></tr>
+          <tr><td>D18</td><td>列表推导式、字典推导式</td></tr>
+          <tr><td>D19</td><td>练习：简易通讯录管理（dict 增删改查）</td></tr>
+          <tr><td>D20</td><td>练习：统计一段文本中每个单词出现次数</td></tr>
+          <tr><td>D21</td><td>复盘：整理 Week 1–3 笔记</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>实现简单的通讯录管理（字典）</li><li>统计文本中每个单词出现次数</li><li>用列表推导式过滤偶数</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">Python 官方教程中文版</span><span class="res-desc">数据结构章节最权威</span></li></ul></div>
+      </div>
+    </div>
+    <div class="milestone">🏁 <b>里程碑 M1</b>　能独立写出 50 行以内的程序，基础练习不查资料能完成</div>
+  </div>
+</section>
+
+<!-- ============ PHASE 2 ============ -->
+<section id="p2">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Phase 2 · 进阶特性</h2></div>
+  <p class="sec-desc">Day 22–42（Week 4–6）· 目标：掌握文件与异常、面向对象编程、模块与工程化管理</p>
+
+  <div class="phase" style="--pc:#58a6ff">
+    <span class="phase-tag">PHASE 2 · WEEK 4</span>
+    <h3>文件操作与异常处理</h3>
+    <p class="phase-goal"><b>目标：</b>会读写文件和各种格式数据，程序出错时有得体的处理。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D22</td><td>open() 读写文件，<b>with 语句</b>（重点，自动关闭文件）</td></tr>
+          <tr><td>D23</td><td>读写模式详解；文本编码（utf-8，避免中文乱码）</td></tr>
+          <tr><td>D24</td><td>csv 模块读写表格数据</td></tr>
+          <tr><td>D25</td><td>json 模块：loads() / dumps()，对接 API 数据</td></tr>
+          <tr><td>D26</td><td>try / except / finally 异常处理</td></tr>
+          <tr><td>D27</td><td>raise 与自定义异常类</td></tr>
+          <tr><td>D28</td><td>补漏：日记本程序（追加写入文件）</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>读取 CSV 文件并统计数据</li><li>简单的日记程序（追加写入）</li><li>文件不存在时给友好提示</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">廖雪峰教程 · 文件/异常章节</span></li><li><span class="res-name">Real Python</span><span class="res-desc">with 语句专题（免费）</span></li></ul></div>
+      </div>
+      <ul class="checks" style="margin-top:12px">
+        <li><label class="ck"><input type="checkbox"><span>用 with 管理文件资源</span></label></li>
+        <li><label class="ck"><input type="checkbox"><span>程序崩溃时有友好提示而非满屏 traceback</span></label></li>
+      </ul>
+    </div>
+
+    <span class="phase-tag">PHASE 2 · WEEK 5</span>
+    <h3>面向对象编程</h3>
+    <p class="phase-goal"><b>目标：</b>理解类与对象，能用 OOP 组织代码。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D29</td><td>class 与对象，__init__ 与 self</td></tr>
+          <tr><td>D30</td><td>属性与方法：实例方法、类方法、静态方法</td></tr>
+          <tr><td>D31</td><td>继承与方法重写（父类 / 子类）</td></tr>
+          <tr><td>D32</td><td>魔术方法：__str__ / __repr__ / __len__</td></tr>
+          <tr><td>D33</td><td>练习：银行账户类（存款、取款、查余额）</td></tr>
+          <tr><td>D34</td><td>练习：图书管理系统（Book 类 + Library 类）</td></tr>
+          <tr><td>D35</td><td>补漏：动物 → 猫 / 狗 继承层次</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>设计「银行账户」类</li><li>设计「图书管理系统」</li><li>用继承实现动物类层次</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">CS50P Lecture 9（edX 免费）</span><span class="res-desc">etiquette / 面向对象</span></li></ul></div>
+      </div>
+      <ul class="checks" style="margin-top:12px">
+        <li><label class="ck"><input type="checkbox"><span>理解「类 = 图纸，对象 = 产品」</span></label></li>
+        <li><label class="ck"><input type="checkbox"><span>知道什么时候该用类（而不是滥用）</span></label></li>
+      </ul>
+    </div>
+
+    <span class="phase-tag">PHASE 2 · WEEK 6</span>
+    <h3>模块与工程化</h3>
+    <p class="phase-goal"><b>目标：</b>会用标准库和第三方库，会管理项目环境。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D36</td><td>import 与 from...import，模块搜索路径</td></tr>
+          <tr><td>D37</td><td>常用标准库：os / sys / datetime / random</td></tr>
+          <tr><td>D38</td><td>re 正则表达式：匹配、验证邮箱格式</td></tr>
+          <tr><td>D39</td><td>pip 安装第三方库，requirements.txt</td></tr>
+          <tr><td>D40</td><td>venv 虚拟环境：每个项目一个环境</td></tr>
+          <tr><td>D41</td><td>Python 项目结构组织（main.py / utils.py / README）</td></tr>
+          <tr><td>D42</td><td>复盘 + 里程碑冲刺</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>用 datetime 写倒计时程序</li><li>用 re 正则验证邮箱格式</li><li>创建虚拟环境并安装第三方库</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">Python 官方文档</span><span class="res-desc">标准库参考（学会查手册）</span></li></ul></div>
+      </div>
+    </div>
+    <div class="milestone">🏁 <b>里程碑 M2</b>　能写面向对象程序，会用 venv + pip 管理项目依赖</div>
+  </div>
+</section>
+
+<!-- ============ PHASE 3 ============ -->
+<section id="p3">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Phase 3 · 实用库入门</h2></div>
+  <p class="sec-desc">Day 43–63（Week 7–9）· 目标：能获取数据、处理数据、把数据可视化</p>
+
+  <div class="phase" style="--pc:#a371f7">
+    <span class="phase-tag">PHASE 3 · WEEK 7</span>
+    <h3>网络请求与数据获取</h3>
+    <p class="phase-goal"><b>目标：</b>会调用 API、会解析网页，把外部数据拿到手。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D43</td><td>HTTP 初识，requests 库 GET 请求</td></tr>
+          <tr><td>D44</td><td>POST 请求、请求头 headers、查询参数 params</td></tr>
+          <tr><td>D45</td><td>调用开放 API（如天气 API），解析返回 JSON</td></tr>
+          <tr><td>D46</td><td>BeautifulSoup 基础：标签、属性、文本提取</td></tr>
+          <tr><td>D47</td><td>爬取豆瓣电影 Top250 的标题和评分</td></tr>
+          <tr><td>D48</td><td>数据落地：保存为 CSV / JSON</td></tr>
+          <tr><td>D49</td><td>补漏 + 复盘</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>调用天气 API 获取当前天气</li><li>爬取豆瓣电影 Top250 标题和评分</li><li>将获取的数据保存为 CSV</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">Real Python · requests 教程</span><span class="res-desc">免费</span></li><li><span class="res-name">Crash Course 爬虫章节</span><span class="res-desc">BeautifulSoup 上手快</span></li></ul></div>
+      </div>
+      <div class="note"><b>⚠️ 合规提醒：</b>只爬公开数据，遵守 robots.txt，控制请求频率（<code>time.sleep</code>），不爬取需登录 / 付费 / 涉及隐私的内容。</div>
+      <ul class="checks" style="margin-top:12px">
+        <li><label class="ck"><input type="checkbox"><span>能独立调用一个 API 并把数据存下来</span></label></li>
+      </ul>
+    </div>
+
+    <span class="phase-tag">PHASE 3 · WEEK 8</span>
+    <h3>数据处理与可视化</h3>
+    <p class="phase-goal"><b>目标：</b>会用 Pandas 清洗分析数据，用 Matplotlib 画出图来讲故事。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D50</td><td>Pandas 入门：Series / DataFrame 创建与查看</td></tr>
+          <tr><td>D51</td><td>数据筛选：条件查询、列选取</td></tr>
+          <tr><td>D52</td><td>数据清洗：缺失值、重复值、类型转换</td></tr>
+          <tr><td>D53</td><td>分组聚合 groupby 与统计</td></tr>
+          <tr><td>D54</td><td>Matplotlib：折线图、柱状图、散点图</td></tr>
+          <tr><td>D55</td><td>图表美化：标题、标签、图例、样式</td></tr>
+          <tr><td>D56</td><td>补漏：完整数据分析小报告</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>用 Pandas 分析一份 CSV 数据集</li><li>画出数据趋势图和分布图</li><li>做一份一页纸数据分析报告</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">Kaggle Learn: Pandas</span><span class="res-desc">微课 + 在线练习</span></li><li><span class="res-name">Kaggle Learn: Data Visualization</span></li><li><span class="res-name">Matplotlib 官方示例库</span><span class="res-desc">抄示例改数据</span></li></ul></div>
+      </div>
+      <ul class="checks" style="margin-top:12px">
+        <li><label class="ck"><input type="checkbox"><span>拿到一份陌生 CSV，能说出「可以分析出什么」</span></label></li>
+      </ul>
+    </div>
+
+    <span class="phase-tag">PHASE 3 · WEEK 9</span>
+    <h3>数据库操作</h3>
+    <p class="phase-goal"><b>目标：</b>会用 SQLite 持久化数据，完成增删改查。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:64px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D57</td><td>SQLite 是什么，sqlite3 模块连接数据库</td></tr>
+          <tr><td>D58</td><td>建表与插入（CREATE / INSERT）</td></tr>
+          <tr><td>D59</td><td>查询：SELECT / WHERE / ORDER BY</td></tr>
+          <tr><td>D60</td><td>更新与删除（UPDATE / DELETE）</td></tr>
+          <tr><td>D61</td><td>学生信息管理系统（完整 CRUD）</td></tr>
+          <tr><td>D62</td><td>从数据库取数并用 Matplotlib 可视化</td></tr>
+          <tr><td>D63</td><td>复盘</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>✏️ 本周练习</h5><ul><li>创建 SQLite 数据库存储学生信息</li><li>实现学生信息的增删改查</li><li>从数据库查询并用图表可视化</li></ul></div>
+        <div class="mini res"><h5>📚 资源</h5><ul><li><span class="res-name">SQLite 官方文档 · Python 教程</span></li><li><span class="res-name">SQLBolt</span><span class="res-desc">免费 SQL 交互练习</span></li></ul></div>
+      </div>
+    </div>
+    <div class="milestone">🏁 <b>里程碑 M3</b>　完成「获取数据 → 清洗处理 → 可视化展示」完整闭环</div>
+  </div>
+</section>
+
+<!-- ============ PHASE 4 ============ -->
+<section id="p4">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Phase 4 · 实战项目</h2></div>
+  <p class="sec-desc">Day 64–77（Week 10–11）· 目标：把前三阶段知识组合成两个能跑、能展示的小项目</p>
+
+  <div class="phase" style="--pc:#ffd343">
+    <span class="phase-tag">PROJECT 1 · WEEK 10</span>
+    <h3>个人记账本</h3>
+    <p class="phase-goal"><b>功能：</b>命令行界面；添加收入 / 支出记录（金额、分类、备注、日期）；按月统计收支；SQLite 存储；Matplotlib 生成月度报表图。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:76px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D64–65</td><td>设计数据结构与数据库表</td></tr>
+          <tr><td>D66–67</td><td>实现记录的新增与查询</td></tr>
+          <tr><td>D68</td><td>按月统计功能</td></tr>
+          <tr><td>D69</td><td>月度报表图表</td></tr>
+          <tr><td>D70</td><td>打磨边界情况 + 写 README</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>🧰 涉及知识</h5><ul><li>函数与类 · 文件与 SQLite · datetime · Matplotlib</li></ul></div>
+        <div class="mini"><h5>⭐ 加分项</h5><ul><li>导出月度 CSV 报表</li><li>支持分类预算与超支提醒</li></ul></div>
+      </div>
+    </div>
+
+    <span class="phase-tag">PROJECT 2 · WEEK 11</span>
+    <h3>新闻聚合器</h3>
+    <p class="phase-goal"><b>功能：</b>从多个信息源抓取新闻标题与链接；按关键词过滤；去重并排序；生成一个可浏览的 HTML 页面。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:76px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D71–72</td><td>单源抓取与解析</td></tr>
+          <tr><td>D73–74</td><td>多源聚合 + 去重</td></tr>
+          <tr><td>D75</td><td>关键词过滤与排序</td></tr>
+          <tr><td>D76</td><td>生成 HTML 页面</td></tr>
+          <tr><td>D77</td><td>打磨 + README</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>🧰 涉及知识</h5><ul><li>requests · BeautifulSoup · 文件操作 · HTML 模板</li></ul></div>
+        <div class="mini"><h5>⭐ 加分项</h5><ul><li>定时自动运行（schedule 库）</li><li>网页加搜索框和分类标签</li></ul></div>
+      </div>
+    </div>
+    <div class="milestone">🏁 <b>里程碑 M4</b>　完成 2 个独立小项目，代码上传 GitHub</div>
+  </div>
+</section>
+
+<!-- ============ PHASE 5 ============ -->
+<section id="p5">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Phase 5 · 综合项目</h2></div>
+  <p class="sec-desc">Day 78–90（Week 12–13）· 目标：产出一个「别人能看懂、能跑起来」的毕业项目</p>
+
+  <div class="phase" style="--pc:#3fb950">
+    <span class="phase-tag">CAPSTONE · WEEK 12–13</span>
+    <h3>个人数据分析仪表盘</h3>
+    <p class="phase-goal"><b>功能：</b>多数据源接入（CSV + API + SQLite）；数据清洗与转换管道；多维度分析（趋势、分类占比、Top N）；生成可视化 HTML 报告；用 Flask 提供简单 Web 界面（加分项）。</p>
+    <div class="week">
+      <table class="daytab">
+        <thead><tr><th style="width:88px">天</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>D78–80</td><td>选题与数据源（选真正感兴趣的主题：健身 / 消费 / 学习 / 游戏数据都行）</td></tr>
+          <tr><td>D81–83</td><td>数据管道：获取 → 清洗 → 存储</td></tr>
+          <tr><td>D84–86</td><td>分析与图表</td></tr>
+          <tr><td>D87–88</td><td>HTML 报告 / Flask 界面</td></tr>
+          <tr><td>D89</td><td>打磨、处理边界情况</td></tr>
+          <tr><td>D90</td><td>写 README + 录演示 + 交付庆祝 🎉</td></tr>
+        </tbody>
+      </table>
+      <div class="week-bottom">
+        <div class="mini"><h5>📦 最终交付物</h5><ul><li>GitHub 仓库 + README（项目说明、运行方式、截图）</li><li>可运行的演示</li></ul></div>
+        <div class="mini"><h5>🧰 涉及知识</h5><ul><li>requests · Pandas · SQLite · Matplotlib · Flask</li></ul></div>
+      </div>
+    </div>
+    <div class="milestone">🏁 <b>里程碑 M5</b>　拥有 1 个「别人能看懂、能跑起来」的综合项目</div>
+  </div>
+</section>
+
+<!-- ============ 资源 ============ -->
+<section id="resources">
+  <div class="sec-head"><span class="sec-num">06</span><h2>免费学习资源推荐</h2></div>
+  <p class="sec-desc">原则：每个方向只选一个主资源，跑通再看下一个，不要囤。</p>
+  <div class="res-grid">
+    <div class="res-card">
+      <h4><span class="dot"></span>教程与文档</h4>
+      <ul>
+        <li><span class="r-name">廖雪峰 Python 教程</span><span class="r-tag">liaoxuefeng.com · 中文图文</span></li>
+        <li><span class="r-name">Python 官方教程中文版</span><span class="r-tag">docs.python.org/zh-cn · 权威</span></li>
+        <li><span class="r-name">Kaggle Learn: Python</span><span class="r-tag">kaggle.com/learn · 微课免安装</span></li>
+        <li><span class="r-name">Real Python</span><span class="r-tag">realpython.com · 偏实践</span></li>
+      </ul>
+    </div>
+    <div class="res-card">
+      <h4><span class="dot" style="background:#a371f7"></span>视频课程</h4>
+      <ul>
+        <li><span class="r-name">freeCodeCamp: Python for Beginners</span><span class="r-tag">YouTube · 约 4.5 小时</span></li>
+        <li><span class="r-name">CS50's Intro to Programming with Python</span><span class="r-tag">edX · 哈佛免费</span></li>
+        <li><span class="r-name">黑马程序员 Python 入门教程</span><span class="r-tag">B 站 · 中文完整</span></li>
+      </ul>
+    </div>
+    <div class="res-card">
+      <h4><span class="dot" style="background:#3fb950"></span>练习平台</h4>
+      <ul>
+        <li><span class="r-name">Exercism: Python Track</span><span class="r-tag">免费 · 有导师反馈</span></li>
+        <li><span class="r-name">Codewars</span><span class="r-tag">游戏化刷题</span></li>
+        <li><span class="r-name">LeetCode</span><span class="r-tag">Phase 3 后刷「简单」题</span></li>
+      </ul>
+    </div>
+    <div class="res-card">
+      <h4><span class="dot" style="background:#ffd343"></span>工具与社区</h4>
+      <ul>
+        <li><span class="r-name">VS Code + Python 扩展</span><span class="r-tag">主力编辑器</span></li>
+        <li><span class="r-name">Python 3.12 + Jupyter Notebook</span><span class="r-tag">数据分析阶段</span></li>
+        <li><span class="r-name">GitHub</span><span class="r-tag">D70 前注册，存代码</span></li>
+        <li><span class="r-name">Stack Overflow / V2EX / 知乎</span><span class="r-tag">报错先搜这里</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 避坑 ============ -->
+<section id="pitfalls">
+  <div class="sec-head"><span class="sec-num">07</span><h2>常见坑与避坑指南</h2></div>
+  <p class="sec-desc">这些坑 90% 的初学者都会踩，提前知道就能少交一半学费。</p>
+  <table class="pit-tab">
+    <thead><tr><th style="width:170px">坑</th><th style="width:230px">现象</th><th>正确做法</th></tr></thead>
+    <tbody>
+      <tr><td>Tab/空格混用</td><td>IndentationError</td><td>统一 4 个空格；VS Code 开启「渲染空格」和自动转换</td></tr>
+      <tr><td>只看不写</td><td>看懂了，写不出</td><td>当天内容亲手敲一遍；抄完要改参数、改结构再跑</td></tr>
+      <tr><td>抄代码不理解</td><td>一报错就慌</td><td>每行问自己「这行在干嘛」；跑通后故意改坏，观察报错</td></tr>
+      <tr><td>遇到报错就放弃</td><td>卡住半天，心态崩</td><td>先读最后一行错误信息 → 复制关键信息搜索 → 前人基本都踩过</td></tr>
+      <tr><td>不用虚拟环境</td><td>包装不上、版本冲突</td><td>每个项目一个 venv，pip install 前先激活环境</td></tr>
+      <tr><td>中英文标点混淆</td><td>SyntaxError: invalid character</td><td>代码里一律用英文标点（引号、冒号、括号、逗号）</td></tr>
+      <tr><td>文件编码乱码</td><td>打开中文文件乱码</td><td>open() 时加 <code>encoding="utf-8"</code></td></tr>
+      <tr><td>变量命名混乱</td><td>a, b, x, tmp 满天飞</td><td>有意义的英文名 + snake_case</td></tr>
+      <tr><td>不写注释</td><td>一周后看不懂自己代码</td><td>关键逻辑写注释，函数写 docstring</td></tr>
+      <tr><td>囤课不开始</td><td>收藏 = 学会</td><td>选定一个主教程，今天就开始</td></tr>
+      <tr><td>盲目追新追全</td><td>同时学 3 个框架</td><td>一个阶段只用一套工具，跑通再换</td></tr>
+      <tr><td>完美主义</td><td>迟迟不敢交付</td><td>先跑起来再优化；90 天看进步，不看好坏</td></tr>
+      <tr><td>中断后自责</td><td>断更 3 天就全盘放弃</td><td>落后时砍练习量、保里程碑；周末补，不要从 Day 1 重启</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:26px">
+    <div class="sec-head"><span class="sec-num">08</span><h2>坚持学习的 5 个技巧</h2></div>
+    <div class="tips">
+      <div class="tip"><div class="no">01</div><h5>固定时间</h5><p>每天同一时段（如 20:00–22:00），形成习惯的条件反射</p></div>
+      <div class="tip"><div class="no">02</div><h5>输出倒逼输入</h5><p>每周写一篇学习笔记，博客 / 朋友圈 / 备忘录都行</p></div>
+      <div class="tip"><div class="no">03</div><h5>加入社区</h5><p>找个学习群或拉上朋友，卡住时有人问、想放弃时有人拉</p></div>
+      <div class="tip"><div class="no">04</div><h5>项目驱动</h5><p>Week 3 后就琢磨「我想做个什么」，带着问题学</p></div>
+      <div class="tip"><div class="no">05</div><h5>允许不完美</h5><p>代码丑没关系，能跑就先提交，后面再优化</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 打卡 ============ -->
+<section id="checklist">
+  <div class="sec-head"><span class="sec-num">09</span><h2>里程碑打卡</h2></div>
+  <p class="sec-desc">原则：里程碑 &gt; 知识点 &gt; 练习量。到了日子先检验里程碑，再决定要不要补细节。</p>
+
+  <div class="prog-box">
+    <div class="prog-meta"><span>完成进度</span><b id="progText">0 / 5</b></div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+    <ul class="checks" id="msList">
+      <li><label class="ck"><input type="checkbox" data-ms><span><b style="color:#4b8bbe">M1（Day 21）</b>　能独立写 50 行以内的程序</span></label></li>
+      <li><label class="ck"><input type="checkbox" data-ms><span><b style="color:#58a6ff">M2（Day 42）</b>　能写面向对象程序，会用 venv + pip</span></label></li>
+      <li><label class="ck"><input type="checkbox" data-ms><span><b style="color:#a371f7">M3（Day 63）</b>　完成「数据获取 → 处理 → 可视化」闭环</span></label></li>
+      <li><label class="ck"><input type="checkbox" data-ms><span><b style="color:#ffd343">M4（Day 77）</b>　2 个独立小项目上传 GitHub</span></label></li>
+      <li><label class="ck"><input type="checkbox" data-ms><span><b style="color:#3fb950">M5（Day 90）</b>　1 个综合项目 + README + 演示</span></label></li>
+    </ul>
+  </div>
+
+  <div style="margin-top:26px">
+    <div class="sec-head"><span class="sec-num">10</span><h2>如果落后了怎么办</h2></div>
+    <div class="fall">
+      <div class="fall-item"><b>缺 1–2 天</b><p>周末补，优先保「里程碑」，不保「每日计划」。</p></div>
+      <div class="fall-item"><b>缺 3 天以上</b><p>砍练习数量，不砍知识点；Phase 4/5 各砍 1 天打磨时间。</p></div>
+      <div class="fall-item"><b>落后超过 1 周</b><p>把 Week 13 当缓冲周，整体顺延而非重来。</p></div>
+      <div class="fall-item"><b>总原则</b><p>里程碑 &gt; 知识点 &gt; 练习量。永远不要从 Day 1 重启。</p></div>
+    </div>
+  </div>
+
+  <blockquote>90 天不会让你变成专家，但会让你建立「我能用代码解决问题」的信心。这种信心比任何知识点都重要。</blockquote>
+</section>
+
+</div>
+
+<footer>
+  <div class="rule"></div>
+  <p>Python 零基础 90 天学习路径 · 每天 2 小时 · 5 阶段 · 5 里程碑 · 5 项目<br>祝你 Day 90 交付顺利 🐍</p>
+</footer>
+
+<script>
+  (function(){
+    var boxes = document.querySelectorAll('input[data-ms]');
+    var fill = document.getElementById('progFill');
+    var text = document.getElementById('progText');
+    function refresh(){
+      var done = 0;
+      boxes.forEach(function(b){ if(b.checked) done++; });
+      fill.style.width = (done/boxes.length*100) + '%';
+      text.textContent = done + ' / ' + boxes.length;
+    }
+    boxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        try{ localStorage.setItem('py90_ms_' + Array.prototype.indexOf.call(boxes, b), b.checked ? '1':'0'); }catch(e){}
+        refresh();
+      });
+      try{
+        var v = localStorage.getItem('py90_ms_' + Array.prototype.indexOf.call(boxes, b));
+        if(v === '1') b.checked = true;
+      }catch(e){}
+    });
+    refresh();
+  })();
+</script>
+</body>
+</html>
